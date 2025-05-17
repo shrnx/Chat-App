@@ -5,13 +5,20 @@ const wss = new WebSocketServer({ port:8000 })
 // This is a User interface for the connection information, where Each user has a websocket connection beloning to a specific room
 interface User{
     socket: WebSocket,
-    roomId: String
+    // roomId: String   // Here this String is an object and we dont want that
+    roomId: string
 }
 
 // This is an array to store all active Websocket connections(users) and their rooms
 let allSockets: User[] = [];
 
 wss.on("connection", (socket) => {
+
+    socket.on("close", () => {
+        allSockets = allSockets.filter(x => x.socket!= socket);
+        // This basically removes the socket(user) from the allSockets array when disconnected
+    })
+
     socket.on("message", (message) => {
         // Message format we will be getting from the client
         //      {
