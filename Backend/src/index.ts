@@ -25,7 +25,7 @@ wss.on("connection", (socket) => {
         if(typeof message === "string") {
             const parsedMessage = JSON.parse(message)
 
-            if(parsedMessage === "join") {       // Now we will handle "join" message type, where a user wants to join the room
+            if(parsedMessage.type === "join") {       // Now we will handle "join" message type, where a user wants to join the room
                 // Here we should add the new user to allSockets array following User interface
                 allSockets.push({
                     socket,
@@ -35,7 +35,7 @@ wss.on("connection", (socket) => {
 
             
             // Now we should handle "chat" message type, where a user wants to chat
-            if(parsedMessage === "chat") {
+            if(parsedMessage.type === "chat") {
                 const currentUserRoom = allSockets.find((x) => x.socket == socket)?.roomId
 
                 // Now broadcast message to all users in the same room
